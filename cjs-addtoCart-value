@@ -1,0 +1,6 @@
+function() {
+  var priceElement = document.querySelector('#app > main > div > div.container > div.fixed-bottom.btn-shadow.sticky-menu > div > div > div.col-8 > p > strong');
+  var priceText = priceElement.textContent;
+  var priceNumeric = parseFloat(priceText.match(/[\d\.]+/)[0]);
+  return priceNumeric;
+}
