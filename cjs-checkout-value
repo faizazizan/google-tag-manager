@@ -1,0 +1,6 @@
+function() {
+  var priceElement = document.querySelector('#headingProducts > h5 > div > div:nth-child(2) > span > strong');
+  var priceText = priceElement.textContent;
+  var priceNumeric = parseFloat(priceText.match(/[\d\.]+/)[0]);
+  return priceNumeric;
+}
