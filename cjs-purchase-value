@@ -1,0 +1,11 @@
+function() {
+  var purchaseElement = document.querySelector("#app > main > div > div > div > div > div > p:nth-child(3)").textContent;
+  var regex = /(\d+\.\d+)/; // Updated regex to match the format 0.00
+  var match = purchaseElement.match(regex);
+  
+  if (match && match[1]) {
+    return parseFloat(match[1]);
+  } else {
+    return null;
+  }
+}
