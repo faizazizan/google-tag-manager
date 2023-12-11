@@ -1,0 +1,103 @@
+<script>
+    window.dataLayer = window.dataLayer || [];
+
+    // Page View
+    window.dataLayer.push({
+        'event': 'pageview',
+        'pageType': 'home',
+        'pageName': 'Home Page',
+        'siteSection': 'Main Section',
+        'referrer': document.referrer
+    });
+
+    // Product Impressions
+    window.dataLayer.push({
+        'event': 'productImpression',
+        'currencyCode': 'USD',
+        'impressions': [
+            {
+                'name': 'Product 1',
+                'id': 'P001',
+                'price': 29.99,
+                'brand': 'Your Brand',
+                'category': 'Category A',
+                'variant': 'Red',
+                'position': 1
+            },
+            // Additional product impressions
+        ]
+    });
+
+    // Product Click
+    window.dataLayer.push({
+        'event': 'productClick',
+        'productClick': {
+            'name': 'Product 1',
+            'id': 'P001',
+            'price': 29.99,
+            'brand': 'Your Brand',
+            'category': 'Category A',
+            'variant': 'Red',
+            'position': 1
+        }
+    });
+
+    // Add to Cart
+    window.dataLayer.push({
+        'event': 'addToCart',
+        'addToCart': {
+            'name': 'Product 1',
+            'id': 'P001',
+            'price': 29.99,
+            'brand': 'Your Brand',
+            'category': 'Category A',
+            'variant': 'Red',
+            'quantity': 1
+        }
+    });
+
+    // Custom Interaction Event
+    window.dataLayer.push({
+        'event': 'customInteraction',
+        'interactionType': 'customEvent',
+        'customEventData': {
+            'key1': 'value1',
+            'key2': 'value2'
+            // Add any custom data relevant to the interaction
+        }
+    });
+
+    // Affiliate Link Click
+    window.dataLayer.push({
+        'event': 'affiliateLinkClick',
+        'affiliateDetails': {
+            'affiliateId': 'AFF001',
+            'affiliateName': 'Partner X',
+            'productName': 'Product 1'
+        }
+    });
+
+    // Video View
+    window.dataLayer.push({
+        'event': 'videoView',
+        'videoDetails': {
+            'videoId': 'VIDEO_001',
+            'videoTitle': 'Product Demo',
+            'videoCategory': 'Product Demonstrations'
+        }
+    });
+
+    // Wishlist Interaction
+    window.dataLayer.push({
+        'event': 'wishlistInteraction',
+        'wishlistAction': 'add', // or 'remove'
+        'product': {
+            'name': 'Product 1',
+            'id': 'P001',
+            'price': 29.99,
+            'brand': 'Your Brand',
+            'category': 'Category A',
+            'variant': 'Red'
+        }
+    });
+</script>
