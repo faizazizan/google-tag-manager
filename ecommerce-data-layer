@@ -1,0 +1,108 @@
+<script>
+    window.dataLayer = window.dataLayer || [];
+
+    // E-commerce data
+    window.dataLayer.push({
+        'event': 'ecommerce',
+        'currencyCode': 'USD',
+        'impressions': [
+            {
+                'name': 'Product 1',
+                'id': 'P001',
+                'price': 29.99,
+                'brand': 'Your Brand',
+                'category': 'Category A',
+                'variant': 'Red',
+                'position': 1
+            },
+            // Additional product impressions
+        ],
+        'promoView': [
+            {
+                'id': 'PROMO_1',
+                'name': 'Summer Sale',
+                'creative': 'summer_sale_banner',
+                'position': 'homepage'
+            },
+            // Additional promotions viewed
+        ],
+        'promoClick': [
+            {
+                'id': 'PROMO_1',
+                'name': 'Summer Sale',
+                'creative': 'summer_sale_banner',
+                'position': 'homepage'
+            },
+            // Additional promotions clicked
+        ],
+        'productClick': {
+            'name': 'Product 1',
+            'id': 'P001',
+            'price': 29.99,
+            'brand': 'Your Brand',
+            'category': 'Category A',
+            'variant': 'Red',
+            'position': 1
+        },
+        'productDetail': {
+            'name': 'Product 1',
+            'id': 'P001',
+            'price': 29.99,
+            'brand': 'Your Brand',
+            'category': 'Category A',
+            'variant': 'Red'
+        },
+        'addToCart': {
+            'name': 'Product 1',
+            'id': 'P001',
+            'price': 29.99,
+            'brand': 'Your Brand',
+            'category': 'Category A',
+            'variant': 'Red',
+            'quantity': 1
+        },
+        'removeFromCart': {
+            'name': 'Product 1',
+            'id': 'P001',
+            'price': 29.99,
+            'brand': 'Your Brand',
+            'category': 'Category A',
+            'variant': 'Red',
+            'quantity': 1
+        },
+        'checkout': {
+            'step': 1,
+            'option': 'Guest Checkout'
+        },
+        'purchase': {
+            'id': 'ORDER_ID',
+            'revenue': 100.00,
+            'tax': 10.00,
+            'shipping': 5.00,
+            'coupon': 'SUMMER10'
+        },
+        'refund': {
+            'id': 'ORDER_ID',
+            'amount': 20.00
+        }
+    });
+
+    // User data
+    window.dataLayer.push({
+        'event': 'user',
+        'userId': 'USER_ID',
+        'userRole': 'registered',
+        'isUserLoggedIn': true
+    });
+
+    // Page data
+    window.dataLayer.push({
+        'event': 'pageview',
+        'pageType': 'product',
+        'pageName': 'Product Page - Product 1',
+        'siteSection': 'Product Section',
+        'referrer': document.referrer,
+        'searchQuery': 'keyword',
+        'searchResults': 10
+    });
+</script>
