@@ -1,0 +1,16 @@
+<script>
+    window.dataLayer = window.dataLayer || [];
+
+    window.dataLayer.push({
+        'event': 'productClick',
+        'productClick': {
+            'name': 'Product 1',
+            'id': 'P001',
+            'price': 29.99,
+            'brand': 'Your Brand',
+            'category': 'Category A',
+            'variant': 'Red',
+            'position': 1
+        }
+    });
+</script>
