@@ -1,0 +1,141 @@
+/***********************************************
+ * A/B TEST: CTA + TITLE + H1 (WITH LOCAL PERSIST)
+ * ------------------------------------------------
+ * PROCEDURE:
+ * 
+ * 1) Check localStorage:
+ *    - Kalau ada variant → guna balik.
+ *    - Kalau tiada → random A atau B, lepas tu simpan.
+ *
+ * 2) Apply Variant:
+ *    - Tukar H1 text.
+ *    - Tukar Page Title (document.title).
+ *    - Tukar Meta Description.
+ *    - Tukar CTA design (color, shape, padding, text).
+ *
+ * 3) Push experiment_loaded event:
+ *    - Beritahu GTM experiment mana sedang running & variant mana user dapat.
+ *
+ * 4) Track CTA click:
+ *    - Bila user klik CTA → send event "cta_click".
+ *
+ * 5) Track purchase (optional):
+ *    - Dipanggil apabila purchase berlaku.
+ *
+ ************************************************/
+
+
+/***************
+ * STEP 1-2:
+ * RANDOMIZE OR LOAD EXISTING VARIANT
+ ***************/
+let variant = localStorage.getItem("ab_variant_full");
+
+if (!variant) {
+  variant = Math.random() < 0.5 ? "A" : "B";   // split 50/50
+  localStorage.setItem("ab_variant_full", variant);
+}
+
+
+/***************
+ * STEP 3:
+ * APPLY VARIANT (TITLE, H1, META DESC, CTA)
+ ***************/
+function applyVariantDesign(variant) {
+
+  /* --- TITLE TEST --- */
+  if (variant === "A") {
+    document.title = "Premium Coffee Beans Malaysia – Fresh & Aromatic";
+  } else {
+    document.title = "Buy Freshly Roasted Coffee Online – Fast Delivery";
+  }
+
+  /* --- META DESCRIPTION TEST (optional tapi baik untuk SEO experiment) --- */
+  const metaDesc = document.querySelector('meta[name="description"]');
+  if (metaDesc) {
+    metaDesc.setAttribute(
+      'content',
+      variant === "A"
+        ? "Shop premium coffee beans roasted fresh daily. High quality, aromatic, and fast delivery."
+        : "Order freshly roasted coffee online. Rich aroma, premium taste, and same-day delivery!"
+    );
+  }
+
+  /* --- H1 TEST --- */
+  const h1 = document.querySelector("h1");
+  if (h1) {
+    if (variant === "A") {
+      h1.innerText = "Premium Coffee Beans for True Coffee Lovers";
+    } else {
+      h1.innerText = "Freshly Roasted Coffee Delivered to Your Doorstep";
+    }
+  }
+
+  /* --- CTA BUTTON DESIGN TEST --- */
+  const btn = document.querySelector('.cta-btn');
+  if (btn) {
+    if (variant === "A") {
+      // Variant A
+      btn.style.backgroundColor = "#1E88E5";   // Blue
+      btn.style.color = "#ffffff";
+      btn.style.padding = "14px 24px";
+      btn.style.borderRadius = "6px";
+      btn.style.border = "none";
+      btn.style.boxShadow = "none";
+      btn.innerText = "Shop Now";
+    } else {
+      // Variant B
+      btn.style.backgroundColor = "#FF5722";   // Orange
+      btn.style.color = "#ffffff";
+      btn.style.padding = "18px 28px";
+      btn.style.borderRadius = "50px";         // Pill shape
+      btn.style.border = "2px solid #ffffff";
+      btn.style.boxShadow = "0 8px 20px rgba(0,0,0,0.2)";
+      btn.innerText = "Get Yours Now";
+    }
+  }
+}
+
+applyVariantDesign(variant);
+
+
+/***************
+ * STEP 4:
+ * PUSH EXPERIMENT LOAD EVENT
+ ***************/
+dataLayer.push({
+  event: 'experiment_loaded',
+  experiment_name: 'Full_Page_CTA_Title_H1_Test',
+  variant: variant
+});
+
+
+/***************
+ * STEP 5:
+ * CTA CLICK TRACKING
+ ***************/
+document.addEventListener("click", function(e) {
+  if (e.target.closest('.cta-btn')) {
+    dataLayer.push({
+      event: 'cta_click',
+      experiment_name: 'Full_Page_CTA_Title_H1_Test',
+      variant: variant
+    });
+  }
+});
+
+
+/***************
+ * STEP 6:
+ * PURCHASE EVENT (CALL THIS ON PURCHASE COMPLETION)
+ * Example: trackPurchase("TX9988", 129.00);
+ ***************/
+function trackPurchase(transactionId, revenue) {
+  dataLayer.push({
+    event: 'purchase',
+    transaction_id: transactionId,
+    revenue: revenue,
+    experiment_name: 'Full_Page_CTA_Title_H1_Test',
+    variant: variant
+  });
+}
