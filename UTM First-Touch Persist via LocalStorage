@@ -1,22 +1,51 @@
 <script>
 (function() {
+
     const params = new URLSearchParams(window.location.search);
 
-    // Helper: get from URL or localStorage or null
-    function getUTM(key) {
-        return params.get(key) || localStorage.getItem(key) || null;
+    // ---------------------------
+    // 1. STANDARDIZE FUNCTION
+    // ---------------------------
+    function standardize(value) {
+        if (!value) return null;
+
+        const map = {
+            "fb": "facebook",
+            "ig": "instagram",
+            "fbads": "facebook_ads",
+            "igads": "instagram_ads",
+            "tiktok": "tiktok",
+            "tt": "tiktok",
+            "google": "google",
+            "g": "google",
+            "yt": "youtube",
+            "youtubeads": "youtube_ads"
+        };
+
+        const lower = value.toLowerCase();
+        return map[lower] || lower;
     }
 
-    // Capture First Touch (only save once)
+    // -----------------------------------
+    // 2. GETTER — URL → localStorage → null
+    // -----------------------------------
+    function getUTM(key) {
+        return params.get(key) 
+            || localStorage.getItem("ft_" + key) 
+            || null;
+    }
+
+    // -----------------------------------
+    // 3. PERSIST FIRST TOUCH
+    // -----------------------------------
     function saveFirstTouch(key) {
         if (params.get(key)) {
-            if (!localStorage.getItem(key)) {
-                localStorage.setItem(key, params.get(key));
+            if (!localStorage.getItem("ft_" + key)) {
+                localStorage.setItem("ft_" + key, params.get(key));
             }
         }
     }
 
-    // UTM list
     const keys = [
         "utm_source",
         "utm_medium",
@@ -28,22 +57,35 @@
         "ttclid"
     ];
 
-    // Save first touch if exists
     keys.forEach(k => saveFirstTouch(k));
 
-    // Build object for dataLayer push
+    // -----------------------------------
+    // 4. BUILD UTM OBJECT (with standardize)
+    // -----------------------------------
     const utm = {};
-    keys.forEach(k => utm[k] = getUTM(k));
 
-    // Fallback: kalau source pun tak ada → guna referrer
+    keys.forEach(k => {
+        const val = getUTM(k);
+        utm[k] = (k.startsWith("utm_")) ? standardize(val) : val;  
+    });
+
+    // -----------------------------------
+    // 5. FALLBACKS
+    // -----------------------------------
     if (!utm.utm_source) {
         utm.utm_source = document.referrer ? "referral" : "direct";
     }
 
-    // Push ke dataLayer
+    if (!utm.utm_medium) {
+        utm.utm_medium = "organic";
+    }
+
+    // -----------------------------------
+    // 6. PUSH TO DATALAYER
+    // -----------------------------------
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({
-        event: "utm_persist",
+        event: "utm_persist_standardized",
         ...utm
     });
 
