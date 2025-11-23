@@ -1,0 +1,27 @@
+<script>
+window.dataLayer = window.dataLayer || [];
+
+(function () {
+    const params = new URLSearchParams(window.location.search);
+
+    const utm = {
+        utm_source: params.get("utm_source") || null,
+        utm_medium: params.get("utm_medium") || null,
+        utm_campaign: params.get("utm_campaign") || null,
+        utm_term: params.get("utm_term") || null,
+        utm_content: params.get("utm_content") || null,
+        gclid: params.get("gclid") || null,
+        fbclid: params.get("fbclid") || null
+    };
+
+    // Only push kalau betul-betul ada UTM/ClickID
+    const hasUTM = Object.values(utm).some(v => v !== null);
+
+    if (hasUTM) {
+        dataLayer.push({
+            event: "utm_params",
+            ...utm
+        });
+    }
+})();
+</script>
