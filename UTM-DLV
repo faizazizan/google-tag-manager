@@ -1,9 +1,49 @@
+<!-- ============================================================
+     GTM UTM + ClickID Tracking Script
+     What this file does:
+     1. Detect UTM & clickID (gclid, fbclid)
+     2. Standardize all param → push into dataLayer
+     3. No localStorage, no persistence (clean & lightweight)
+     4. GTM-friendly structure
+     ------------------------------------------------------------
+     GTM SETUP CHECKLIST (WAJIB BUAT DALAM GTM):
+     
+     1️⃣  Create Data Layer Variables:
+         - dlv.utm_source
+         - dlv.utm_medium
+         - dlv.utm_campaign
+         - dlv.utm_term
+         - dlv.utm_content
+         - dlv.gclid
+         - dlv.fbclid
+
+     2️⃣  Create Custom Event Trigger:
+         Event name: utm_params
+         Trigger type: Custom Event → "utm_params"
+
+     3️⃣  (Optional) Create Lookup Table to Standardize Channels
+         Input: utm_medium
+         Output example:
+            cpc      → Paid Search
+            ppc      → Paid Search
+            paid     → Paid Search
+            display  → Display
+            email    → Email
+            social   → Paid Social / Organic Social
+            referral → Referral
+            direct   → Direct
+
+     4️⃣  Publish Container
+     ============================================================ -->
+
 <script>
 window.dataLayer = window.dataLayer || [];
 
 (function () {
+    // Get URL parameters
     const params = new URLSearchParams(window.location.search);
 
+    // Extract UTM + click IDs
     const utm = {
         utm_source: params.get("utm_source") || null,
         utm_medium: params.get("utm_medium") || null,
@@ -14,14 +54,16 @@ window.dataLayer = window.dataLayer || [];
         fbclid: params.get("fbclid") || null
     };
 
-    // Only push kalau betul-betul ada UTM/ClickID
+    // Check if any UTM or clickID is present
     const hasUTM = Object.values(utm).some(v => v !== null);
 
+    // Only push if UTM/clickID exists
     if (hasUTM) {
         dataLayer.push({
             event: "utm_params",
             ...utm
         });
     }
+
 })();
 </script>
