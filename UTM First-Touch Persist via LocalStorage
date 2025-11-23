@@ -1,0 +1,51 @@
+<script>
+(function() {
+    const params = new URLSearchParams(window.location.search);
+
+    // Helper: get from URL or localStorage or null
+    function getUTM(key) {
+        return params.get(key) || localStorage.getItem(key) || null;
+    }
+
+    // Capture First Touch (only save once)
+    function saveFirstTouch(key) {
+        if (params.get(key)) {
+            if (!localStorage.getItem(key)) {
+                localStorage.setItem(key, params.get(key));
+            }
+        }
+    }
+
+    // UTM list
+    const keys = [
+        "utm_source",
+        "utm_medium",
+        "utm_campaign",
+        "utm_term",
+        "utm_content",
+        "gclid",
+        "fbclid",
+        "ttclid"
+    ];
+
+    // Save first touch if exists
+    keys.forEach(k => saveFirstTouch(k));
+
+    // Build object for dataLayer push
+    const utm = {};
+    keys.forEach(k => utm[k] = getUTM(k));
+
+    // Fallback: kalau source pun tak ada → guna referrer
+    if (!utm.utm_source) {
+        utm.utm_source = document.referrer ? "referral" : "direct";
+    }
+
+    // Push ke dataLayer
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+        event: "utm_persist",
+        ...utm
+    });
+
+})();
+</script>
